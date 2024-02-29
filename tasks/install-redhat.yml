@@ -27,7 +27,7 @@
     environment: "{{proxy_env if proxy_env is defined else {}}}"
   - name: reboot to pick up the new kernel
     reboot:
-    when: not nvidia_driver_skip_reboot
+    when: nvidia_driver_reboot
 
 - name: add epel repo gpg key
   rpm_key:
@@ -81,9 +81,9 @@
   environment: "{{proxy_env if proxy_env is defined else {}}}"
   when: ansible_distribution_major_version > '7'
 
-- name: Set install_driver.changed var for RHEL 7/8
+- name: Set install_driver['changed'] var for RHEL 7/8
   debug:
       msg: Driver installed for RHEL
-  when: install_driver_rhel7.changed or install_driver_rhel8.changed
+  when: install_driver_rhel7['changed'] or install_driver_rhel8['changed']
   register: install_driver
-  changed_when: install_driver_rhel7.changed or install_driver_rhel8.changed
+  changed_when: install_driver_rhel7['changed'] or install_driver_rhel8['changed']
